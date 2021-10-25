@@ -2,6 +2,9 @@ import { createSelector } from 'reselect';
 
 import { AppState } from '../rootReducer';
 
-const getIdeas = (state: AppState) => state.ideas.ideasList;
+const getIdeaList = (state: AppState) => state.idea.ideaList;
 
-export const getIdeasSelector = createSelector(getIdeas, (ideas) => ideas);
+export const getIdeaListSelector = createSelector(
+  getIdeaList,
+  (ideaList) => ideaList
+);

@@ -3,7 +3,7 @@ import { combineReducers } from 'redux';
 import ideasReducer from './ideas/reducer';
 
 const rootReducer = combineReducers({
-  ideas: ideasReducer,
+  idea: ideasReducer,
 });
 
 export type AppState = ReturnType<typeof rootReducer>;
