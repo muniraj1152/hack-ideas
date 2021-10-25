@@ -19,17 +19,30 @@ const getIdeaList = () => {
 const addIdea = (idea: any) => {
   const list: any = localStorage.getItem('ideas');
   const ideaList: any = JSON.parse(list) ? JSON.parse(list) : [];
-  if (!ideaList) {
-    localStorage.setItem('lastIdeaId', '1');
+
+  if (idea.id === '0') {
+    if (!ideaList) {
+      localStorage.setItem('lastIdeaId', '1');
+    } else {
+      const id = Number(localStorage.getItem('lastIdeaId'));
+      localStorage.setItem('lastIdeaId', `${id + 1}`);
+    }
+    idea.id = localStorage.getItem('lastIdeaId');
+    const userString: any = localStorage.getItem('loggedInUser');
+    const loggedInUser = JSON.parse(userString);
+    idea.employeeId = loggedInUser && loggedInUser.id ? loggedInUser.id : '0';
+    ideaList.push(idea);
   } else {
-    const id = Number(localStorage.getItem('lastIdeaId'));
-    localStorage.setItem('lastIdeaId', `${id + 1}`);
+    let ideaIndex: any = null;
+    ideaList &&
+      ideaList.map((item: any, index: number) => {
+        if (Number(item.id) === Number(idea.id)) {
+          ideaIndex = index;
+        }
+      });
+    ideaList[ideaIndex] = idea;
   }
-  idea.id = localStorage.getItem('lastIdeaId');
-  const userString: any = localStorage.getItem('loggedInUser');
-  const loggedInUser = JSON.parse(userString);
-  idea.employeeId = loggedInUser && loggedInUser.id ? loggedInUser.id : '';
-  ideaList.push(idea);
+
   localStorage.setItem('ideas', JSON.stringify(ideaList));
   return ideaList;
 };

@@ -10,11 +10,12 @@ import {
 } from './actionTypes';
 
 export interface IIdea {
-  id: number;
+  id: string;
   title: string;
   description: string;
   tags: Array<string>;
   employeeId: string;
+  upVoteList: Array<string>;
 }
 
 export interface IdeaState {

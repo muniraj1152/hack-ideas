@@ -41,7 +41,11 @@ export default function TagInput(props: any) {
           {tags &&
             tags.map((tag: string, index: any) => {
               return (
-                <Badge variant="secondary" className="p-2 mr-2" key={index}>
+                <Badge
+                  variant="secondary"
+                  className="p-2 mr-2 mb-2"
+                  key={index}
+                >
                   {tag}{' '}
                   <span
                     className={`${styles.a} pl-1`}

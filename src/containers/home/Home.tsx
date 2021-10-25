@@ -14,13 +14,16 @@ import { getIdeaListSelector } from '../../store/ideas/selectors';
 import { IIdea } from '../../store/ideas/types';
 
 import TagInput from '../../components/tagInput/TagInput';
+import Upvote from '../../components/upvote/Upvote';
+import UserIcon from '../../assets/person.png';
 
 const ideaInitialState: IIdea = {
-  id: 0,
+  id: '0',
   title: '',
   tags: ['tech', 'future'],
   description: '',
-  employeeId: '',
+  employeeId: '0',
+  upVoteList: [],
 };
 
 const Home = () => {
@@ -28,6 +31,10 @@ const Home = () => {
   const ideaList = useSelector(getIdeaListSelector);
 
   const [idea, setIdea] = useState(ideaInitialState);
+
+  const userString: any = localStorage.getItem('loggedInUser');
+  const loggedInUser = JSON.parse(userString);
+  const employeeId = loggedInUser && loggedInUser.id ? loggedInUser.id : '0';
 
   const handleChange = (event: any) => {
     const { name, value } = event.target;
@@ -51,11 +58,13 @@ const Home = () => {
     if (form.checkValidity() === false) {
       event.preventDefault();
       event.stopPropagation();
+      setValidated(true);
+    } else {
+      setValidated(false);
+      dispatch(addIdea(idea));
+      setIsOpen(false);
+      setIdea(ideaInitialState);
     }
-    setValidated(true);
-    dispatch(addIdea(idea));
-    setIsOpen(false);
-    setIdea(ideaInitialState);
   };
 
   /**
@@ -83,6 +92,20 @@ const Home = () => {
 
   const hideModal = () => {
     setIsOpen(false);
+  };
+
+  const onChangeVote = (index: any) => {
+    console.log(ideaList[index]);
+    const idea = ideaList[index];
+    if (idea.upVoteList && idea.upVoteList.includes(employeeId)) {
+      const index = idea.upVoteList.indexOf(employeeId);
+      if (index > -1) {
+        idea.upVoteList.splice(index, 1);
+      }
+    } else {
+      idea.upVoteList.push(employeeId);
+    }
+    dispatch(addIdea(idea));
   };
 
   return (
@@ -117,24 +140,44 @@ const Home = () => {
           ideaList.map((idea: any, index: any) => {
             return (
               <div className="card mx-2 mb-3" key={index}>
-                <div className="card-body">
-                  <h5 className="card-title">{idea.title}</h5>
-                  <p className="card-text">{idea.description}</p>
-                  <div className="border-bottom mb-3">
-                    <label>Tags</label>
-                    <div className="mb-3">
-                      {idea.tags &&
-                        idea.tags.map((tag: string, index: any) => {
-                          return (
-                            <Badge
-                              variant="secondary"
-                              className="p-2 mr-2"
-                              key={index}
-                            >
-                              {tag}
-                            </Badge>
-                          );
-                        })}
+                <div className="card-body row">
+                  <div className="col-1">
+                    <Upvote
+                      ideaIndex={index}
+                      count={idea.upVoteList ? idea.upVoteList.length : 0}
+                      isUpVoted={
+                        idea.upVoteList && idea.upVoteList.includes(employeeId)
+                      }
+                      onChangeVote={onChangeVote}
+                    ></Upvote>
+                  </div>
+                  <div className="col-11">
+                    <h5 className="card-title">{idea.title}</h5>
+                    <p className="card-text">{idea.description}</p>
+                    <div className="border-bottom mb-3">
+                      <label>Tags</label>
+                      <div className="mb-3">
+                        {idea.tags &&
+                          idea.tags.map((tag: string, index: any) => {
+                            return (
+                              <Badge
+                                variant="secondary"
+                                className="p-2 mr-2 mb-2"
+                                key={index}
+                              >
+                                {tag}
+                              </Badge>
+                            );
+                          })}
+                      </div>
+                    </div>
+                    <div>
+                      <span>
+                        <img src={UserIcon} className="image" />
+                      </span>
+                      <span className="pl-3 text-secondary">
+                        Created by Employee of Id : {employeeId}
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -145,11 +188,11 @@ const Home = () => {
       {/* Modal component consists of add new idea functionality */}
       <div>
         <Modal show={isOpen} onHide={hideModal} animation={false}>
-          <Modal.Header>
-            <Modal.Title>Add Idea</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <Form noValidate validated={validated} onSubmit={saveIdea}>
+          <Form noValidate validated={validated} onSubmit={saveIdea}>
+            <Modal.Header>
+              <Modal.Title>Add Idea</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
               <Form.Group className="mb-3">
                 <Form.Label>Title</Form.Label>
                 <Form.Control
@@ -173,21 +216,18 @@ const Home = () => {
                   required
                 />
               </Form.Group>
-            </Form>
-            <div></div>
-          </Modal.Body>
-          <Modal.Footer>
-            <button onClick={hideModal} className="btn btn-secondary">
-              Cancel
-            </button>
-            <button
-              className="btn btn-primary"
-              type="submit"
-              onClick={saveIdea}
-            >
-              Save
-            </button>
-          </Modal.Footer>
+              <div></div>
+            </Modal.Body>
+            <Modal.Footer>
+              <button onClick={hideModal} className="btn btn-secondary">
+                Cancel
+              </button>
+              <button className="btn btn-primary" type="submit">
+                {/* onClick={saveIdea} */}
+                Save
+              </button>
+            </Modal.Footer>
+          </Form>
         </Modal>
       </div>
     </div>
