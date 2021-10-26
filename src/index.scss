@@ -1,5 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap');
-
+@import 'assets/fonts/font.scss';
 @import 'styles/variables';
 
 // Import Bootstrap and its default variables
@@ -46,4 +45,8 @@ body {
 .image {
   width: 30px;
   height: 30px;
+}
+
+.title {
+  color: #8698a9;
 }

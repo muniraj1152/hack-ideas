@@ -6,6 +6,7 @@ export default function Upvote(props: any) {
   const onChangeVote = () => {
     props.onChangeVote(props.ideaIndex);
   };
+
   return (
     <div className="row h-100">
       <div

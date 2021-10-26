@@ -1,10 +1,29 @@
-# Getting Started with Create React App
+### The Hack ideas application has been configured by the following features.
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+- Using CRA  [create-react-app](https://create-react-app.dev/ "Create React App")
+- Typescript in CRA `npx create-react-app <app-name> --template typescript`
+- [ReduxSaga](https://redux-saga.js.org/ "ReduxSaga")
+- [React Router](https://reactrouter.com/web/guides/quick-start "React Router")
+- [SCSS](https://create-react-app.dev/docs/adding-a-sass-stylesheet/ "SCSS")
+- [CSS Modules](https://create-react-app.dev/docs/adding-a-css-modules-stylesheet/ "CSS Modules")
+- [Bootstrap 4](https://getbootstrap.com/docs/4.0/getting-started/introduction/ "Bootstrap 4")
+- [Prettier](https://prettier.io/docs/en/configuration.html "prettier")
+- [lint-staged](https://github.com/okonet/lint-staged#readme "lint-staged")
+- [stylelint](https://stylelint.io/ "stylelint")
+- [ESLint](https://eslint.org/)
 
-## Available Scripts
+## node version
 
-In the project directory, you can run:
+node 14.17.0 is used.
+
+## Development server
+
+## cd hack-ideas
+
+Navigate into project folder
+## npm install
+
+Install dependencies
 
 ### `npm start`
 
@@ -29,18 +48,12 @@ Your app is ready to be deployed!
 
 See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
-### `npm run eject`
+## Bootstrap and react bootstrap installed
+Bootstrap  installed with command `npm install bootstrap react-bootstrap`. Bootstrap classes works fine inside projects. 
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+## Redux saga implemented
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## pre-commit hooks configured
+pre-commit hooks configured for projects.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).

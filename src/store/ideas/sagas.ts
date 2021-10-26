@@ -11,15 +11,24 @@ import {
   getIdeasByTitleSuccess,
 } from './actions';
 
+/**
+ * getIdeaList returns all avaialble ideas
+ */
 const getIdeaList = () => {
   const list: any = localStorage.getItem('ideas');
   return JSON.parse(list) ? JSON.parse(list) : [];
 };
 
+/**
+ * To add new idea or update existing idea
+ * Update upvoteList in idea object
+ * @param idea
+ */
 const addIdea = (idea: any) => {
   const list: any = localStorage.getItem('ideas');
   const ideaList: any = JSON.parse(list) ? JSON.parse(list) : [];
 
+  // checking id to determine whether idea object is new or existing.
   if (idea.id === '0') {
     if (!ideaList) {
       localStorage.setItem('lastIdeaId', '1');
@@ -28,9 +37,7 @@ const addIdea = (idea: any) => {
       localStorage.setItem('lastIdeaId', `${id + 1}`);
     }
     idea.id = localStorage.getItem('lastIdeaId');
-    const userString: any = localStorage.getItem('loggedInUser');
-    const loggedInUser = JSON.parse(userString);
-    idea.employeeId = loggedInUser && loggedInUser.id ? loggedInUser.id : '0';
+    idea.employeeId = localStorage.getItem('loggedInUserId') || 0;
     ideaList.push(idea);
   } else {
     let ideaIndex: any = null;
@@ -47,6 +54,10 @@ const addIdea = (idea: any) => {
   return ideaList;
 };
 
+/**
+ * This method used for filtering ideas based on title
+ * @param searchText
+ */
 const getIdeasByTitle = (searchText: any) => {
   const list: any = localStorage.getItem('ideas');
   const ideas = JSON.parse(list) ? JSON.parse(list) : [];

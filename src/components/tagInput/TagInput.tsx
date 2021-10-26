@@ -1,19 +1,30 @@
 import React, { useState } from 'react';
 import { Badge, Form } from 'react-bootstrap';
+
 import styles from './TagInput.module.scss';
 
 export default function TagInput(props: any) {
   const [tagInput, setTagInput] = useState('');
   const tags = props.tags;
-  const addTag = (value: any) => {
+
+  /**
+   * To add tags as a list
+   * @param value tag title
+   * @param e event which trigger while users press enter
+   */
+  const addTag = (value: any, e: any) => {
+    e.preventDefault();
     if (value) {
-      console.log(value);
       tags.push(value);
       props.onTagChange(tags);
       setTagInput('');
     }
   };
 
+  /**
+   * To remove specific tag based on index
+   * @param index
+   */
   const onDeleteTag = (index: any) => {
     tags.splice(index, 1);
     props.onTagChange(tags);
@@ -34,7 +45,7 @@ export default function TagInput(props: any) {
           placeholder="Add tags"
           onChange={onValueChange}
           onKeyDown={(e: any) => {
-            e.key === 'Enter' && addTag(e.target.value);
+            e.key === 'Enter' && addTag(e.target.value, e);
           }}
         />
         <div className="pt-2">
@@ -48,7 +59,7 @@ export default function TagInput(props: any) {
                 >
                   {tag}{' '}
                   <span
-                    className={`${styles.a} pl-1`}
+                    className={`${styles.close} pl-1`}
                     onClick={() => onDeleteTag(index)}
                   >
                     x

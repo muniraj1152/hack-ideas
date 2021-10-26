@@ -13,36 +13,26 @@ import {
 import { getIdeaListSelector } from '../../store/ideas/selectors';
 import { IIdea } from '../../store/ideas/types';
 
+// Import components
 import TagInput from '../../components/tagInput/TagInput';
 import Upvote from '../../components/upvote/Upvote';
-import UserIcon from '../../assets/person.png';
-
-const ideaInitialState: IIdea = {
-  id: '0',
-  title: '',
-  tags: ['tech', 'future'],
-  description: '',
-  employeeId: '0',
-  upVoteList: [],
-};
+import UserIcon from '../../assets/images/person.png';
 
 const Home = () => {
+  const ideaInitialState: IIdea = {
+    id: '0',
+    title: '',
+    tags: ['tech', 'future'],
+    description: '',
+    employeeId: '0',
+    upVoteList: [],
+  };
   const [validated, setValidated] = useState(false);
   const ideaList = useSelector(getIdeaListSelector);
 
   const [idea, setIdea] = useState(ideaInitialState);
 
-  const userString: any = localStorage.getItem('loggedInUser');
-  const loggedInUser = JSON.parse(userString);
-  const employeeId = loggedInUser && loggedInUser.id ? loggedInUser.id : '0';
-
-  const handleChange = (event: any) => {
-    const { name, value } = event.target;
-    setIdea((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }));
-  };
+  const employeeId: any = localStorage.getItem('loggedInUserId') || 0;
 
   const dispatch = useDispatch();
 
@@ -76,8 +66,35 @@ const Home = () => {
     dispatch(getIdeasByTitle(searchValue.toLowerCase()));
   };
 
+  /**
+   *  Dynamically values set based on name and value and state updated
+   * */
+  const handleChange = (event: any) => {
+    const { name, value } = event.target;
+    setIdea((prevState: any) => ({
+      ...prevState,
+      [name]: value,
+    }));
+  };
+
+  /**
+   * To handle upvote functionality for loggeed in user.
+   * @param index idea object index
+   */
+  const onChangeVote = (index: any) => {
+    const idea = ideaList[index];
+    if (idea.upVoteList && idea.upVoteList.includes(employeeId)) {
+      const index = idea.upVoteList.indexOf(employeeId);
+      if (index > -1) {
+        idea.upVoteList.splice(index, 1);
+      }
+    } else {
+      idea.upVoteList.push(employeeId);
+    }
+    dispatch(addIdea(idea));
+  };
+
   const onTagChange = (value: any) => {
-    console.log('val----', value);
     setIdea({
       ...idea,
       tags: value,
@@ -92,20 +109,7 @@ const Home = () => {
 
   const hideModal = () => {
     setIsOpen(false);
-  };
-
-  const onChangeVote = (index: any) => {
-    console.log(ideaList[index]);
-    const idea = ideaList[index];
-    if (idea.upVoteList && idea.upVoteList.includes(employeeId)) {
-      const index = idea.upVoteList.indexOf(employeeId);
-      if (index > -1) {
-        idea.upVoteList.splice(index, 1);
-      }
-    } else {
-      idea.upVoteList.push(employeeId);
-    }
-    dispatch(addIdea(idea));
+    setIdea(ideaInitialState);
   };
 
   return (
@@ -134,14 +138,14 @@ const Home = () => {
         </Form>
       </div>
 
-      {/* List of Notes content , every note display as card with specific title, description and category*/}
+      {/* List of Ideas content , every idea display as card with specific title, description and list of tags*/}
       <div className={styles.cardContainer}>
         {ideaList &&
           ideaList.map((idea: any, index: any) => {
             return (
               <div className="card mx-2 mb-3" key={index}>
                 <div className="card-body row">
-                  <div className="col-1">
+                  <div className="col-1 pl-4">
                     <Upvote
                       ideaIndex={index}
                       count={idea.upVoteList ? idea.upVoteList.length : 0}
@@ -176,7 +180,7 @@ const Home = () => {
                         <img src={UserIcon} className="image" />
                       </span>
                       <span className="pl-3 text-secondary">
-                        Created by Employee of Id : {employeeId}
+                        Created by Employee of Id : {idea.employeeId}
                       </span>
                     </div>
                   </div>
@@ -219,11 +223,14 @@ const Home = () => {
               <div></div>
             </Modal.Body>
             <Modal.Footer>
-              <button onClick={hideModal} className="btn btn-secondary">
+              <button
+                onClick={hideModal}
+                className="btn btn-secondary"
+                type="button"
+              >
                 Cancel
               </button>
               <button className="btn btn-primary" type="submit">
-                {/* onClick={saveIdea} */}
                 Save
               </button>
             </Modal.Footer>

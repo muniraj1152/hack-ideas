@@ -1,15 +1,7 @@
-.headColor {
-  color: rgb(25, 0, 255);
-}
-
 @import 'styles/variables';
 
 .mainContainer {
   height: calc(100vh - 43px);
-}
-
-.container {
-  vertical-align: top;
 }
 
 .mainTitle {
@@ -28,7 +20,8 @@
 }
 
 .cardContainer {
-  height: calc(100vh - 241px);
+  height: calc(100vh - 258px);
   margin-bottom: 30px;
   overflow-y: scroll;
+  overflow-x: hidden;
 }

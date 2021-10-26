@@ -72,7 +72,6 @@
     "stylelint-config-standard": "^22.0.0"
   },
   "lint-staged": {
-    "src/**/*": "prettier --check --ignore-unknown",
     "src/**/*.{ts,tsx}": "npm run lint",
     "*.scss": [
       "stylelint --syntax=scss"
